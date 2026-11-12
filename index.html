@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>케이 | 소개</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root {
+    --bg-from: #F8FAFC;
+    --bg-to: #E0F2FE;
+    --accent: #0EA5E9;
+    --accent-soft: #E0F2FE;
+    --ink: #1E293B;
+    --muted: #64748B;
+    --card: rgba(255, 255, 255, 0.62);
+    --card-border: rgba(255, 255, 255, 0.85);
+    --line: rgba(14, 165, 233, 0.18);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html, body { height: 100%; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    padding: 24px 16px;
+    background: linear-gradient(160deg, var(--bg-from) 0%, var(--bg-to) 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ---------- 떠다니는 점 ---------- */
+  .dots {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .dot {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--s);
+    height: var(--s);
+    border-radius: 50%;
+    background: var(--c);
+    opacity: var(--o);
+    animation: drift var(--d) ease-in-out var(--delay) infinite alternate;
+    will-change: transform;
+  }
+  @keyframes drift {
+    0%   { transform: translate(0, 0); }
+    50%  { transform: translate(calc(var(--dx) * 0.4), var(--dy)); }
+    100% { transform: translate(var(--dx), calc(var(--dy) * -0.6)); }
+  }
+
+  /* ---------- 카드 ---------- */
+  .card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 400px;
+    padding: 48px 36px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    backdrop-filter: blur(18px) saturate(140%);
+    box-shadow:
+      0 1px 2px rgba(15, 23, 42, 0.04),
+      0 12px 32px -8px rgba(14, 165, 233, 0.18),
+      0 24px 48px -24px rgba(15, 23, 42, 0.12);
+    transition: transform 0.4s cubic-bezier(.2, .8, .2, 1), box-shadow 0.4s cubic-bezier(.2, .8, .2, 1);
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+      0 1px 2px rgba(15, 23, 42, 0.04),
+      0 20px 44px -10px rgba(14, 165, 233, 0.28),
+      0 32px 64px -28px rgba(15, 23, 42, 0.16);
+  }
+
+  .avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #38BDF8 0%, var(--accent) 100%);
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.9), 0 8px 24px -6px rgba(14, 165, 233, 0.55);
+    margin-bottom: 24px;
+    user-select: none;
+  }
+
+  .name {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .bio {
+    margin: 10px 0 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted);
+    word-break: keep-all;
+  }
+
+  /* ---------- 관심 태그 ---------- */
+  .tags {
+    list-style: none;
+    margin: 24px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .tags li {
+    list-style: none;
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    cursor: default;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .tags li::marker { content: none; }
+  .tags li:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  /* 카드 hover 시 왼쪽부터 순서대로 떠오르는 stagger */
+  .card:hover .tags li {
+    animation: rise 0.45s cubic-bezier(.2, .8, .2, 1) both;
+    animation-delay: calc(var(--i) * 90ms);
+  }
+  @keyframes rise {
+    from { opacity: 0; translate: 0 8px; }
+    to   { opacity: 1; translate: 0 0; }
+  }
+
+  /* ---------- 소셜 링크 ---------- */
+  .divider {
+    width: 100%;
+    height: 1px;
+    margin: 28px 0 24px;
+    background: linear-gradient(90deg, transparent, var(--line), transparent);
+    border: 0;
+  }
+
+  .social {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  .social a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    border-radius: 12px;
+    transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .social a svg { width: 18px; height: 18px; flex: none; }
+  .social a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 6px 16px -6px rgba(14, 165, 233, 0.45);
+    transform: translateY(-1px);
+  }
+  .social a:focus-visible {
+    outline: 3px solid rgba(14, 165, 233, 0.45);
+    outline-offset: 2px;
+  }
+
+  /* ---------- 모바일 ---------- */
+  @media (max-width: 480px) {
+    .card { padding: 40px 24px 32px; border-radius: 20px; }
+    .avatar { width: 76px; height: 76px; font-size: 30px; margin-bottom: 20px; }
+    .name { font-size: 24px; }
+    .bio { font-size: 15px; }
+    .social a { width: 100%; justify-content: center; }
+  }
+
+  /* ---------- 모션 줄이기 ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .dot { animation: none; }
+    .card, .card:hover { transition: none; transform: none; }
+    .card:hover .tags li { animation: none; }
+    .social a:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="dots" aria-hidden="true"></div>
+
+  <main class="card">
+    <div class="avatar" aria-hidden="true">K</div>
+    <h1 class="name">케이</h1>
+    <p class="bio">코드와 커피, 책과 산책을 좋아합니다</p>
+
+    <ul class="tags" aria-label="관심사">
+      <li style="--i:0">독서</li>
+      <li style="--i:1">커피</li>
+    </ul>
+
+    <hr class="divider">
+
+    <nav class="social" aria-label="소셜 링크">
+      <a href="https://blog.naver.com/lkine" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 20h9"/>
+          <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+        </svg>
+        Blog
+      </a>
+    </nav>
+  </main>
+
+  <script>
+    (function () {
+      var layer = document.querySelector('.dots');
+      var colors = ['#0EA5E9', '#38BDF8', '#7DD3FC', '#0284C7'];
+      var rand = function (min, max) { return Math.random() * (max - min) + min; };
+      var frag = document.createDocumentFragment();
+
+      for (var i = 0; i < 30; i++) {
+        var d = document.createElement('span');
+        d.className = 'dot';
+        var s = d.style;
+        s.setProperty('--x', rand(0, 100).toFixed(2) + '%');
+        s.setProperty('--y', rand(0, 100).toFixed(2) + '%');
+        s.setProperty('--s', rand(4, 10).toFixed(1) + 'px');
+        s.setProperty('--c', colors[i % colors.length]);
+        s.setProperty('--o', rand(0.15, 0.4).toFixed(2));
+        s.setProperty('--dx', rand(-60, 60).toFixed(0) + 'px');
+        s.setProperty('--dy', rand(-70, 70).toFixed(0) + 'px');
+        s.setProperty('--d', rand(14, 26).toFixed(1) + 's');
+        s.setProperty('--delay', (-rand(0, 20)).toFixed(1) + 's');
+        frag.appendChild(d);
+      }
+      layer.appendChild(frag);
+    })();
+  </script>
+</body>
+</html>
